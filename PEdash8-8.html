@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PE Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern Color Palette */
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary-color: #f59e0b;
+            --secondary-light: #fbbf24;
+            --secondary-dark: #d97706;
+            
+            /* Neutral Colors */
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            /* Status Colors */
+            --success-color: #10b981;
+            --success-light: #34d399;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --info-color: #3b82f6;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-family-display: 'Orbitron', 'Inter', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-4);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        /* Layout Toggle */
+        .layout-toggle {
+            position: fixed;
+            top: var(--space-2);
+            right: var(--space-2);
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-1) var(--space-2);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .layout-toggle:hover {
+            background: var(--gray-50);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: var(--space-8) var(--space-6);
+            border-radius: var(--radius-2xl);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.025em;
+        }
+
+        .header .subtitle {
+            font-size: var(--font-size-lg);
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .quick-btn {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--gray-700);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .quick-btn:hover::before {
+            left: 100%;
+        }
+
+        .quick-btn:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .quick-btn i {
+            display: block;
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--space-3);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover i {
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        /* Main Content Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6);
+            flex: 1;
+        }
+
+        /* Timer Section */
+        .timer-section {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .timer-section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-1px);
+        }
+
+        .timer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .timer-mode {
+            font-size: var(--font-size-sm);
+            color: var(--primary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mode-switch {
+            background: var(--gray-100);
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-switch:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: var(--space-6);
+            cursor: pointer;
+            padding: var(--space-6);
+            background: var(--gray-50);
+            border-radius: var(--radius-xl);
+            transition: all 0.3s ease;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+        }
+
+        .timer-display:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: scale(1.02);
+        }
+
+        .timer-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .control-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+        }
+
+        .control-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .timer-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-2);
+        }
+
+        .preset-btn {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            background: var(--secondary-color);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        /* Weather Widget */
+        .weather-widget {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .weather-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .weather-icon {
+            font-size: var(--font-size-2xl);
+        }
+
+        .weather-temp {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+        }
+
+        .weather-condition {
+            font-size: var(--font-size-sm);
+            opacity: 0.9;
+        }
+
+        .weather-center {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .command-center-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.025em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, var(--white), var(--secondary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .command-center-subtitle {
+            font-size: var(--font-size-base);
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .weather-right {
+            text-align: right;
+            position: relative;
+            z-index: 1;
+        }
+
+        .current-time {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+        }
+
+        .temp-range {
+            font-size: var(--font-size-sm);
+            opacity: 0.9;
+        }
+
+        /* Tools Grid */
+        .tools-section {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .tool-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-card:hover {
+            background: var(--white);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .tool-card i {
+            font-size: var(--font-size-3xl);
+            color: var(--primary-color);
+            margin-bottom: var(--space-3);
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover i {
+            transform: scale(1.1);
+            color: var(--primary-dark);
+        }
+
+        .tool-card h3 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: var(--space-2);
+        }
+
+        .tool-card p {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            padding: var(--space-2);
+            box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+            z-index: 100;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            padding: var(--space-3);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            color: var(--gray-600);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            border-radius: var(--radius-lg);
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .nav-item i {
+            display: block;
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-1);
+        }
+
+        /* Professional Broadcast Scoreboard */
+        .fullscreen-scoreboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            z-index: 2000;
+            color: var(--white);
+            overflow: hidden;
+            font-family: var(--font-family-display);
+        }
+
+        /* Professional Scoreboard Background */
+        .pro-scoreboard-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(99, 102, 241, 0.1) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(245, 158, 11, 0.1) 50%, transparent 70%),
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 50%);
+            animation: proBackgroundShift 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes proBackgroundShift {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* Professional Scoreboard Header */
+        .pro-scoreboard-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+            padding: var(--space-6) var(--space-8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .pro-scoreboard-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: linear-gradient(45deg, #6366f1, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .pro-close-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: var(--white);
+            border-radius: 50%;
+            width: 4rem;
+            height: 4rem;
+            cursor: pointer;
+            font-size: var(--font-size-2xl);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pro-close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* Professional Game Controls */
+        .pro-game-controls {
+            position: absolute;
+            top: var(--space-8);
+            right: 50%;
+            transform: translateX(50%);
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+            background: rgba(0,0,0,0.8);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-2xl);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .pro-time-control {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .pro-time-label {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: #f59e0b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pro-time-input {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: var(--white);
+            width: 4rem;
+            text-align: center;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            padding: var(--space-2);
+            border-radius: var(--radius-lg);
+            font-family: var(--font-family-display);
+        }
+
+        .pro-time-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .time-wheel-container {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: rgba(0,0,0,0.8);
+            padding: var(--space-2);
+            border-radius: var(--radius-xl);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .time-wheel-btn {
+            background: rgba(245, 158, 11, 0.8);
+            border: 2px solid #f59e0b;
+            color: var(--white);
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            cursor: pointer;
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-wheel-btn:hover {
+            background: #f59e0b;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .time-wheel-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 var(--space-4);
+            min-width: 5rem;
+        }
+
+        .time-wheel-display span:first-child {
+            font-size: var(--font-size-3xl);
+            font-weight: 900;
+            color: #f59e0b;
+            font-family: var(--font-family-display);
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .time-unit {
+            font-size: var(--font-size-sm);
+            color: rgba(255,255,255,0.8);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        /* Professional Team Names */
+        .pro-team-names {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--space-12);
+            z-index: 10;
+        }
+
+        .pro-team-input {
+            background: rgba(0,0,0,0.8);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            color: var(--white);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            min-width: 250px;
+            font-family: var(--font-family-display);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+        }
+
+        .pro-team-input:nth-child(1) {
+            border-image: linear-gradient(45deg, #6366f1, #8b5cf6) 1;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .pro-team-input:nth-child(2) {
+            border-image: linear-gradient(45deg, #f59e0b, #f97316) 1;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .pro-team-input:focus {
+            outline: none;
+            transform: scale(1.05);
+        }
+
+        .pro-team-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Professional Main Scoreboard */
+        .pro-main-scoreboard {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: var(--space-12);
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            z-index: 10;
+        }
+
+        .pro-team-section {
+            text-align: center;
+            position: relative;
+        }
+
+        .pro-team-name-display {
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            margin-bottom: var(--space-6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 20px currentColor;
+            font-family: var(--font-family-display);
+        }
+
+        .pro-team-section:nth-child(1) .pro-team-name-display {
+            color: #6366f1;
+        }
+
+        .pro-team-section:nth-child(3) .pro-team-name-display {
+            color: #f59e0b;
+        }
+
+        .pro-score-display {
+            font-size: 12rem;
+            font-weight: 900;
+            font-family: var(--font-family-display);
+            text-shadow: 
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor;
+            animation: proScoreGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            line-height: 1;
+            margin-bottom: var(--space-4);
+        }
+
+        .pro-team-section:nth-child(1) .pro-score-display {
+            color: #6366f1;
+        }
+
+        .pro-team-section:nth-child(3) .pro-score-display {
+            color: #f59e0b;
+        }
+
+        @keyframes proScoreGlow {
+            0% { 
+                text-shadow: 
+                    0 0 10px currentColor,
+                    0 0 20px currentColor,
+                    0 0 30px currentColor;
+                transform: scale(1);
+            }
+            100% { 
+                text-shadow: 
+                    0 0 15px currentColor,
+                    0 0 30px currentColor,
+                    0 0 45px currentColor,
+                    0 0 60px currentColor;
+                transform: scale(1.02);
+            }
+        }
+
+        .pro-vs-divider {
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.8);
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
+            font-family: var(--font-family-display);
+            position: relative;
+        }
+
+        .pro-vs-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: proVsRotate 4s linear infinite;
+        }
+
+        @keyframes proVsRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Professional Game Timer */
+        .pro-game-timer {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .pro-timer-label {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: var(--space-3);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .pro-timer-display {
+            font-size: 8rem;
+            font-weight: 900;
+            font-family: var(--font-family-display);
+            color: #ffffff;
+            text-shadow: 
+                0 0 20px rgba(255,255,255,0.8),
+                0 0 40px rgba(255,255,255,0.6),
+                0 0 60px rgba(255,255,255,0.4);
+            animation: proTimerPulse 2s ease-in-out infinite alternate;
+            line-height: 1;
+            background: linear-gradient(45deg, #ffffff, #e5e7eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes proTimerPulse {
+            0% { 
+                transform: scale(1);
+                text-shadow: 
+                    0 0 20px rgba(255,255,255,0.8),
+                    0 0 40px rgba(255,255,255,0.6);
+            }
+            100% { 
+                transform: scale(1.05);
+                text-shadow: 
+                    0 0 30px rgba(255,255,255,1),
+                    0 0 60px rgba(255,255,255,0.8),
+                    0 0 90px rgba(255,255,255,0.6);
+            }
+        }
+
+        /* Professional Control Panel */
+        .pro-control-panel {
+            position: absolute;
+            bottom: var(--space-8);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .pro-control-btn {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.9));
+            border: 2px solid rgba(255,255,255,0.3);
+            color: var(--white);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-xl);
+            cursor: pointer;
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-family: var(--font-family-display);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pro-control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .pro-control-btn:hover::before {
+            left: 100%;
+        }
+
+        .pro-control-btn:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(99, 102, 241, 0.9));
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            border-color: #6366f1;
+        }
+
+        .pro-control-btn.team1:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(99, 102, 241, 0.9));
+            border-color: #6366f1;
+        }
+
+        .pro-control-btn.team2:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.8), rgba(245, 158, 11, 0.9));
+            border-color: #f59e0b;
+        }
+
+        .pro-control-btn.timer-btn:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(16, 185, 129, 0.9));
+            border-color: #10b981;
+        }
+
+        .pro-control-btn.reset-btn:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(239, 68, 68, 0.9));
+            border-color: #ef4444;
+        }
+
+        /* Professional Winner Celebration */
+        .pro-winner-celebration {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pro-winner-text {
+            font-size: 8rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: var(--space-8);
+            animation: proWinnerBounce 1.5s ease-in-out infinite alternate;
+            font-family: var(--font-family-display);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: linear-gradient(45deg, #6366f1, #f59e0b, #10b981, #ef4444);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: proWinnerBounce 1.5s ease-in-out infinite alternate, proWinnerGradient 3s ease-in-out infinite;
+            text-shadow: 0 0 60px rgba(255,255,255,0.5);
+        }
+
+        @keyframes proWinnerBounce {
+            0% { transform: scale(1) rotate(-1deg); }
+            100% { transform: scale(1.1) rotate(1deg); }
+        }
+
+        @keyframes proWinnerGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .pro-fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .pro-firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: proFireworkExplode 1.5s ease-out forwards;
+        }
+
+        @keyframes proFireworkExplode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(15);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(30);
+                opacity: 0;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Special styling for professional scoreboard modal */
+        .modal#proScoreboardModal {
+            background: transparent;
+            backdrop-filter: none;
+        }
+
+        .modal#proScoreboardModal .fullscreen-scoreboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1001;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-header h3 {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: var(--font-size-2xl);
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: all 0.2s ease;
+            border-radius: var(--radius-md);
+            padding: var(--space-1);
+        }
+
+        .close-btn:hover {
+            color: var(--gray-600);
+            background: var(--gray-100);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-2);
+            font-weight: 500;
+            font-size: var(--font-size-sm);
+            color: var(--gray-700);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: var(--space-3);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Popup Timer */
+        .popup-timer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-xl);
+            z-index: 2000;
+            text-align: center;
+            display: none;
+            border: 1px solid var(--gray-200);
+        }
+
+        .popup-timer .timer-display {
+            font-size: 5rem;
+            margin-bottom: var(--space-6);
+            background: none;
+            padding: 0;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1999;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Desktop Layout */
+        .desktop-layout .container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: var(--space-8);
+            max-width: 1600px;
+        }
+
+        .desktop-layout .sidebar {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            height: fit-content;
+            position: sticky;
+            top: var(--space-4);
+        }
+
+        .desktop-layout .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        .desktop-layout .quick-actions {
+            grid-template-columns: 1fr;
+            gap: var(--space-3);
+        }
+
+        .desktop-layout .tools-grid {
+            grid-template-columns: 1fr;
+            gap: var(--space-3);
+        }
+
+        .desktop-layout .bottom-nav {
+            display: none;
+        }
+
+        .desktop-layout .main-grid {
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-2);
+                gap: var(--space-4);
+                padding-bottom: 100px;
+            }
+
+            .header {
+                padding: var(--space-6) var(--space-4);
+            }
+
+            .header h1 {
+                font-size: var(--font-size-3xl);
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+
+            .timer-display {
+                font-size: 3rem;
+                padding: var(--space-4);
+            }
+
+            .popup-timer .timer-display {
+                font-size: 4rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-3);
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-3);
+            }
+
+            .bottom-nav {
+                display: block;
+            }
+
+            .pro-score-display {
+                font-size: 6rem;
+            }
+
+            .pro-winner-text {
+                font-size: 4rem;
+            }
+
+            .pro-timer-display {
+                font-size: 4rem;
+            }
+
+            .pro-main-scoreboard {
+                gap: var(--space-6);
+            }
+
+            .pro-team-input {
+                min-width: 180px;
+                font-size: var(--font-size-lg);
+            }
+
+            .pro-control-panel {
+                gap: var(--space-2);
+                padding: 0 var(--space-4);
+            }
+
+            .pro-control-btn {
+                padding: var(--space-3) var(--space-4);
+                font-size: var(--font-size-base);
+            }
+
+            .pro-scoreboard-title {
+                font-size: var(--font-size-xl);
+            }
+
+            .pro-vs-divider {
+                font-size: 3rem;
+            }
+
+            .pro-vs-divider::before {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .layout-toggle {
+                top: var(--space-2);
+                right: var(--space-2);
+                padding: var(--space-1) var(--space-2);
+                font-size: var(--font-size-xs);
+            }
+
+            .header h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .timer-display {
+                font-size: 2.5rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+                gap: var(--space-2);
+            }
+
+            .quick-btn {
+                padding: var(--space-4);
+            }
+
+            .modal-content {
+                padding: var(--space-6);
+                width: 95%;
+            }
+
+            .pro-score-display {
+                font-size: 4rem;
+            }
+
+            .pro-winner-text {
+                font-size: 2.5rem;
+            }
+
+            .pro-timer-display {
+                font-size: 3rem;
+            }
+
+            .pro-team-names {
+                gap: var(--space-6);
+            }
+
+            .pro-team-input {
+                min-width: 140px;
+                font-size: var(--font-size-base);
+                padding: var(--space-3) var(--space-4);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+        .opacity-50 { opacity: 0.5; }
+        .opacity-75 { opacity: 0.75; }
+        .hidden { display: none; }
+        .block { display: block; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+    </style>
+</head>
+<body>
+    <div class="layout-toggle" onclick="toggleLayout()">
+        <i class="fas fa-desktop" id="layoutIcon"></i>
+        <span id="layoutText">Desktop View</span>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar for desktop -->
+        <div class="sidebar" style="display: none;">
+            <div class="header">
+                <div class="header-content">
+                    <h1>PE Dashboard</h1>
+                    <div class="subtitle">Professional • Multi-Device • Purple & Gold</div>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <a href="https://drive.google.com/drive/folders/1XAf65jzdGLRL47hGj-zQVhRcpNkbbhTt" target="_blank" class="quick-btn">
+                    <i class="fas fa-folder-open"></i>
+                    Lesson Plans
+                </a>
+                <a href="https://outlook.office.com/mail/" target="_blank" class="quick-btn">
+                    <i class="fas fa-envelope"></i>
+                    Email Inbox
+                </a>
+                <button class="quick-btn" onclick="openModal('youtubeModal')">
+                    <i class="fab fa-youtube"></i>
+                    YouTube Search
+                </button>
+            </div>
+
+            <div class="tools-section">
+                <h2 class="section-title">
+                    <i class="fas fa-tools"></i>
+                    Teaching Tools
+                </h2>
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="openModal('aiModal')">
+                        <i class="fas fa-robot"></i>
+                        <h3>Create Lessons w/ AI</h3>
+                        <p>Texas TEKS-based lesson plans with Gemini AI assistance</p>
+                    </div>
+                    <div class="tool-card" onclick="openFullscreenScoreboard()">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Game Scoreboard</h3>
+                        <p>Professional broadcast-quality scoreboard</p>
+                    </div>
+                    <div class="tool-card" onclick="openModal('musicModal')">
+                        <i class="fas fa-music"></i>
+                        <h3>Music Player</h3>
+                        <p>Your custom PE playlist from Spotify</p>
+                    </div>
+                    <div class="tool-card" onclick="openModal('studentModal')">
+                        <i class="fas fa-users"></i>
+                        <h3>Student Data</h3>
+                        <p>Track participation and progress</p>
+                    </div>
+                    <div class="tool-card" onclick="openModal('fitnessModal')">
+                        <i class="fas fa-dumbbell"></i>
+                        <h3>FitnessGram</h3>
+                        <p>Physical fitness assessments and tracking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Weather Widget with Command Center Title -->
+            <div class="weather-widget fade-in">
+                <div class="weather-left">
+                    <i class="fas fa-cloud-sun weather-icon"></i>
+                    <div>
+                        <div class="weather-temp" id="weatherTemp">72°F</div>
+                        <div class="weather-condition" id="weatherCondition">Partly Cloudy</div>
+                    </div>
+                </div>
+                <div class="weather-center">
+                    <div class="command-center-title">Coaches Command Center</div>
+                </div>
+                <div class="weather-right">
+                    <div class="current-time" id="currentTime">12:30 PM</div>
+                    <div class="temp-range">H:<span id="highTemp">78</span>° L:<span id="lowTemp">65</span>°</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions for mobile -->
+            <div class="quick-actions mobile-actions fade-in">
+                <a href="https://drive.google.com/drive/folders/1XAf65jzdGLRL47hGj-zQVhRcpNkbbhTt" target="_blank" class="quick-btn">
+                    <i class="fas fa-folder-open"></i>
+                    Lesson Plans
+                </a>
+                <a href="https://outlook.office.com/mail/" target="_blank" class="quick-btn">
+                    <i class="fas fa-envelope"></i>
+                    Email Inbox
+                </a>
+                <button class="quick-btn" onclick="openModal('musicModal')">
+                    <i class="fas fa-music"></i>
+                    Music Player
+                </button>
+                <button class="quick-btn" onclick="openModal('proScoreboardModal')">
+                    <i class="fas fa-trophy"></i>
+                    Game Scoreboard
+                </button>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="main-grid">
+                <!-- Timer Section -->
+                <div class="timer-section fade-in">
+                    <div class="timer-header">
+                        <div class="timer-mode" id="timerMode">TIMER MODE</div>
+                        <button class="mode-switch" onclick="toggleTimerMode()">
+                            <i class="fas fa-exchange-alt"></i> Switch Mode
+                        </button>
+                    </div>
+                    
+                    <div class="timer-display" id="timerDisplay" onclick="openTimerPopup()">00:00</div>
+                    
+                    <div class="timer-controls">
+                        <button class="control-btn" id="startPauseBtn" onclick="toggleTimer()">
+                            <i class="fas fa-play" id="timerIcon"></i>
+                            <span id="timerBtnText">Start</span>
+                        </button>
+                        <button class="control-btn" onclick="resetTimer()">
+                            <i class="fas fa-stop"></i>
+                            Reset
+                        </button>
+                        <button class="control-btn" onclick="openFullscreenScoreboard()">
+                            <i class="fas fa-trophy"></i>
+                            Scoreboard
+                        </button>
+                    </div>
+
+                    <div class="timer-presets" id="timerPresets">
+                        <button class="preset-btn" onclick="setTimer(1)">1 min</button>
+                        <button class="preset-btn" onclick="setTimer(2)">2 min</button>
+                        <button class="preset-btn" onclick="setTimer(5)">5 min</button>
+                        <button class="preset-btn" onclick="setTimer(10)">10 min</button>
+                    </div>
+                </div>
+
+                <!-- Teaching Tools -->
+                <div class="tools-section fade-in">
+                    <h2><i class="fas fa-tools"></i> Teaching Tools</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="openModal('aiModal')">
+                            <i class="fas fa-robot"></i>
+                            <h3>Create Lessons w/ AI</h3>
+                            <p>Texas TEKS-based lesson plans</p>
+                        </div>
+                        <div class="tool-card" onclick="openModal('youtubeModal')">
+                            <i class="fab fa-youtube"></i>
+                            <h3>YouTube Search</h3>
+                            <p>K-5 safe educational videos</p>
+                        </div>
+                        <div class="tool-card" onclick="openModal('moreToolsModal')">
+                            <i class="fas fa-ellipsis-h"></i>
+                            <h3>More Tools</h3>
+                            <p>Student data, fitness tracking & more</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation for mobile -->
+            <div class="bottom-nav mobile-nav">
+                <div class="nav-grid">
+                    <button class="nav-item active" onclick="showSection('timer')">
+                        <i class="fas fa-clock"></i>
+                        Timer
+                    </button>
+                    <button class="nav-item" onclick="showSection('youtube')">
+                        <i class="fab fa-youtube"></i>
+                        YouTube
+                    </button>
+                    <button class="nav-item" onclick="showSection('scoreboard')">
+                        <i class="fas fa-trophy"></i>
+                        Score
+                    </button>
+                    <button class="nav-item" onclick="showSection('tools')">
+                        <i class="fas fa-tools"></i>
+                        More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Broadcast Scoreboard -->
+    <div class="modal" id="proScoreboardModal">
+        <div class="fullscreen-scoreboard" id="fullscreenScoreboard">
+            <div class="pro-scoreboard-bg"></div>
+            
+            <!-- Professional Header -->
+            <div class="pro-scoreboard-header">
+                <div class="pro-scoreboard-title">PE Championship</div>
+                <button class="pro-close-btn" onclick="closeModal('proScoreboardModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+        <!-- Professional Game Controls -->
+        <div class="pro-game-controls">
+            <div class="pro-time-control">
+                <span class="pro-time-label">Game Time:</span>
+                <div class="time-wheel-container">
+                    <button class="time-wheel-btn" onclick="adjustGameTime(-1)">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <div class="time-wheel-display">
+                        <span id="proGameMinutesDisplay">10</span>
+                        <span class="time-unit">MIN</span>
+                    </div>
+                    <button class="time-wheel-btn" onclick="adjustGameTime(1)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Team Names -->
+        <div class="pro-team-names">
+            <input type="text" class="pro-team-input" id="proTeam1Name" value="Purple Team" onchange="updateProTeamNames()">
+            <input type="text" class="pro-team-input" id="proTeam2Name" value="Gold Team" onchange="updateProTeamNames()">
+        </div>
+
+        <!-- Professional Main Scoreboard -->
+        <div class="pro-main-scoreboard">
+            <div class="pro-team-section">
+                <div class="pro-team-name-display" id="proTeam1Display">Purple Team</div>
+                <div class="pro-score-display" id="proScore1">0</div>
+            </div>
+            <div class="pro-vs-divider">VS</div>
+            <div class="pro-team-section">
+                <div class="pro-team-name-display" id="proTeam2Display">Gold Team</div>
+                <div class="pro-score-display" id="proScore2">0</div>
+            </div>
+        </div>
+
+        <!-- Professional Game Timer -->
+        <div class="pro-game-timer">
+            <div class="pro-timer-label">Game Clock</div>
+            <div class="pro-timer-display" id="proGameTimer">10:00</div>
+        </div>
+
+        <!-- Professional Control Panel -->
+        <div class="pro-control-panel">
+            <button class="pro-control-btn team1" onclick="changeProScore(1, -1)">
+                <i class="fas fa-minus"></i>
+                <span>Team 1</span>
+            </button>
+            <button class="pro-control-btn team1" onclick="changeProScore(1, 1)">
+                <i class="fas fa-plus"></i>
+                <span>Team 1</span>
+            </button>
+            <button class="pro-control-btn timer-btn" id="proGameStartPauseBtn" onclick="toggleProGameTimer()">
+                <i class="fas fa-play" id="proGameTimerIcon"></i>
+                <span id="proGameTimerBtnText">Start</span>
+            </button>
+            <button class="pro-control-btn team2" onclick="changeProScore(2, -1)">
+                <i class="fas fa-minus"></i>
+                <span>Team 2</span>
+            </button>
+            <button class="pro-control-btn team2" onclick="changeProScore(2, 1)">
+                <i class="fas fa-plus"></i>
+                <span>Team 2</span>
+            </button>
+            <button class="pro-control-btn reset-btn" onclick="resetProGame()">
+                <i class="fas fa-redo"></i>
+                <span>Reset</span>
+            </button>
+        </div>
+
+        <!-- Professional Winner Celebration -->
+        <div class="pro-winner-celebration" id="proWinnerCelebration">
+            <div class="pro-winner-text" id="proWinnerText">PURPLE TEAM WINS!</div>
+            <div class="pro-fireworks" id="proFireworks"></div>
+        </div>
+    </div>
+
+    <!-- Timer Popup -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closeTimerPopup()"></div>
+    <div class="popup-timer" id="popupTimer">
+        <div class="timer-display" id="popupTimerDisplay">00:00</div>
+        <button class="control-btn" onclick="closeTimerPopup()">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
+    </div>
+
+    <!-- AI Modal -->
+    <div class="modal" id="aiModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-robot"></i> Create Lessons w/ AI</h3>
+                <button class="close-btn" onclick="closeModal('aiModal')">&times;</button>
+            </div>
+            <div style="margin-bottom: var(--space-6);">
+                <button onclick="copyPromptToClipboard()" class="submit-btn" style="margin-bottom: var(--space-3);">
+                    <i class="fas fa-copy"></i> Copy Texas TEKS Prompt
+                </button>
+                <a href="https://gemini.google.com" target="_blank" class="submit-btn" style="display: block; text-align: center; text-decoration: none; background: var(--secondary-color);">
+                    <i class="fas fa-external-link-alt"></i> Open Gemini AI
+                </a>
+            </div>
+            <details style="font-size: var(--font-size-sm);">
+                <summary style="cursor: pointer; margin-bottom: var(--space-3); font-weight: 500;">View Prompt Template</summary>
+                <div style="background: var(--gray-50); padding: var(--space-4); border-radius: var(--radius-lg); font-family: 'Courier New', monospace; font-size: var(--font-size-xs); line-height: 1.5;">
+                    Create a Texas TEKS-based PE lesson plan with links for warmups and pictures/diagrams for activities. Give detailed instructions on how to teach each activity.<br><br>
+                    Class Details:<br>
+                    • Two main sections: Kindergarten-2nd grade OR 3rd-5th grade<br>
+                    • About 25 kids per class<br>
+                    • 50 minute duration<br><br>
+                    Include: Texas TEKS standards, warmup links, activity diagrams/pictures, detailed teaching instructions, safety considerations, and assessment methods.
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- YouTube Modal -->
+    <div class="modal" id="youtubeModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3><i class="fab fa-youtube"></i> YouTube Search - K-5 PE Videos</h3>
+                <button class="close-btn" onclick="closeModal('youtubeModal')">&times;</button>
+            </div>
+            
+            <!-- Search Section -->
+            <div style="margin-bottom: var(--space-6);">
+                <div class="form-group">
+                    <label>Search for K-5 Appropriate PE Videos</label>
+                    <div style="display: flex; gap: var(--space-3);">
+                        <input type="text" id="youtubeSearch" placeholder="e.g., warm up exercises, basketball drills, yoga for kids" style="flex: 1;">
+                        <button onclick="searchYouTube()" class="control-btn" style="padding: var(--space-3) var(--space-4); white-space: nowrap;">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Search Buttons -->
+                <div style="margin-bottom: var(--space-4);">
+                    <div style="font-size: var(--font-size-sm); margin-bottom: var(--space-2); font-weight: 500;">Quick Searches:</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-2);">
+                        <button onclick="quickSearch('PE warm up kids')" class="preset-btn">Warm-ups</button>
+                        <button onclick="quickSearch('kids yoga elementary')" class="preset-btn">Yoga</button>
+                        <button onclick="quickSearch('PE games elementary school')" class="preset-btn">PE Games</button>
+                        <button onclick="quickSearch('dance kids exercise')" class="preset-btn">Dance</button>
+                        <button onclick="quickSearch('stretching kids elementary')" class="preset-btn">Stretching</button>
+                        <button onclick="quickSearch('sports skills kids')" class="preset-btn">Sports Skills</button>
+                        <button onclick="quickSearch('marble race kids fun')" class="preset-btn">Fun Videos</button>
+                        <button onclick="quickSearch('brain break kids entertainment')" class="preset-btn">Brain Breaks</button>
+                    </div>
+                </div>
+                
+                <!-- Filter Info -->
+                <div style="background: var(--gray-50); padding: var(--space-4); border-radius: var(--radius-lg); font-size: var(--font-size-sm); border-left: 4px solid var(--primary-color);">
+                    <strong>K-5 Safe Search:</strong> All searches automatically include filters for educational, age-appropriate content suitable for elementary PE classes.
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div id="youtubeResults" style="display: none;">
+                <div style="font-weight: 600; margin-bottom: var(--space-4); color: var(--primary-color);">Search Results:</div>
+                <div id="videoResults" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+            
+            <!-- Loading Indicator -->
+            <div id="youtubeLoading" style="display: none; text-align: center; padding: var(--space-8);">
+                <i class="fas fa-spinner fa-spin" style="font-size: var(--font-size-3xl); color: var(--primary-color);"></i>
+                <div style="margin-top: var(--space-3);">Searching for K-5 appropriate videos...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Modal -->
+    <div class="modal" id="musicModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-music"></i> Music Player</h3>
+                <button class="close-btn" onclick="closeModal('musicModal')">&times;</button>
+            </div>
+            <div style="text-align: center; padding: var(--space-8);">
+                <div style="margin-bottom: var(--space-4);">
+                    <i class="fas fa-music" style="font-size: 3rem; color: var(--primary-color); margin-bottom: var(--space-3);"></i>
+                    <h3 style="margin-bottom: var(--space-2);">Your PE Playlist</h3>
+                    <p style="color: var(--gray-600); margin-bottom: var(--space-4);">Click below to open your custom Spotify playlist</p>
+                </div>
+                <a href="https://open.spotify.com/playlist/0boUPemGL4BlE5I0y0xOtO" target="_blank" class="submit-btn" style="display: inline-block; text-decoration: none; background: #1DB954;">
+                    <i class="fab fa-spotify"></i> Open Spotify Playlist
+                </a>
+                <div style="margin-top: var(--space-4); font-size: var(--font-size-sm); color: var(--gray-500);">
+                    Opens in Spotify app or web player
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Data Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-users"></i> Student Data Entry</h3>
+                <button class="close-btn" onclick="closeModal('studentModal')">&times;</button>
+            </div>
+            <form id="quickStudentForm">
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                <div class="form-group">
+                    <label>Grade Level</label>
+                    <select id="studentGrade" required>
+                        <option value="">Select Grade</option>
+                        <option value="K">Kindergarten</option>
+                        <option value="1">1st Grade</option>
+                        <option value="2">2nd Grade</option>
+                        <option value="3">3rd Grade</option>
+                        <option value="4">4th Grade</option>
+                        <option value="5">5th Grade</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Participation Level (1-5)</label>
+                    <select id="participation" required>
+                        <option value="">Rate Participation</option>
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3">3 - Average</option>
+                        <option value="2">2 - Below Average</option>
+                        <option value="1">1 - Poor</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Save Student Data
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fitness Modal -->
+    <div class="modal" id="fitnessModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-dumbbell"></i> FitnessGram Assessment</h3>
+                <button class="close-btn" onclick="closeModal('fitnessModal')">&times;</button>
+            </div>
+            <form id="fitnessForm">
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" id="fitnessName" required>
+                </div>
+                <div class="form-group">
+                    <label>PACER Test (Laps)</label>
+                    <input type="number" id="pacerLaps" min="0" placeholder="Number of laps completed">
+                </div>
+                <div class="form-group">
+                    <label>Push-ups (Count)</label>
+                    <input type="number" id="pushUps" min="0" placeholder="Number of push-ups">
+                </div>
+                <div class="form-group">
+                    <label>Sit & Reach (inches)</label>
+                    <input type="number" id="sitReach" step="0.1" placeholder="Distance in inches">
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-chart-line"></i> Save Assessment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let timerInterval;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
+        let isCountUpMode = false;
+        let proGameTimerInterval;
+        let proGameTimerSeconds = 0;
+        let isProGameTimerRunning = false;
+        let proTeam1Score = 0;
+        let proTeam2Score = 0;
+        let isDesktopLayout = false;
+        let proGameMinutes = 10; // Add game minutes variable
+
+        // Time wheel functions
+        function adjustGameTime(change) {
+            proGameMinutes = Math.max(1, Math.min(60, proGameMinutes + change));
+            document.getElementById('proGameMinutesDisplay').textContent = proGameMinutes;
+            
+            // Update timer if not running
+            if (!isProGameTimerRunning) {
+                proGameTimerSeconds = proGameMinutes * 60;
+                updateProGameTimerDisplay();
+            }
+        }
+
+        // Layout toggle
+        function toggleLayout() {
+            isDesktopLayout = !isDesktopLayout;
+            const body = document.body;
+            const sidebar = document.querySelector('.sidebar');
+            const mobileElements = document.querySelectorAll('.mobile-header, .mobile-actions, .mobile-tools, .mobile-nav');
+            const layoutIcon = document.getElementById('layoutIcon');
+            const layoutText = document.getElementById('layoutText');
+
+            if (isDesktopLayout) {
+                body.classList.add('desktop-layout');
+                sidebar.style.display = 'block';
+                mobileElements.forEach(el => el.style.display = 'none');
+                layoutIcon.className = 'fas fa-mobile-alt';
+                layoutText.textContent = 'Mobile View';
+            } else {
+                body.classList.remove('desktop-layout');
+                sidebar.style.display = 'none';
+                mobileElements.forEach(el => el.style.display = '');
+                layoutIcon.className = 'fas fa-desktop';
+                layoutText.textContent = 'Desktop View';
+            }
+        }
+
+        // Timer functions
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay() {
+            const display = formatTime(timerSeconds);
+            document.getElementById('timerDisplay').textContent = display;
+            document.getElementById('popupTimerDisplay').textContent = display;
+        }
+
+        function toggleTimerMode() {
+            isCountUpMode = !isCountUpMode;
+            const modeElement = document.getElementById('timerMode');
+            const presetsElement = document.getElementById('timerPresets');
+            
+            if (isCountUpMode) {
+                modeElement.textContent = 'STOPWATCH MODE';
+                presetsElement.style.display = 'none';
+            } else {
+                modeElement.textContent = 'TIMER MODE';
+                presetsElement.style.display = 'grid';
+            }
+            
+            resetTimer();
+        }
+
+        function setTimer(minutes) {
+            if (!isCountUpMode) {
+                timerSeconds = minutes * 60;
+                updateTimerDisplay();
+            }
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                updateTimerButton();
+                timerInterval = setInterval(() => {
+                    if (isCountUpMode) {
+                        // Count up mode (stopwatch)
+                        timerSeconds++;
+                        updateTimerDisplay();
+                    } else {
+                        // Count down mode (timer)
+                        if (timerSeconds > 0) {
+                            timerSeconds--;
+                            updateTimerDisplay();
+                        } else {
+                            resetTimer();
+                            showNotification('⏰ Time\'s up!', 'success');
+                        }
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            updateTimerButton();
+        }
+
+        function resetTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            timerSeconds = 0;
+            updateTimerDisplay();
+            updateTimerButton();
+        }
+
+        function updateTimerButton() {
+            const btn = document.getElementById('startPauseBtn');
+            const icon = document.getElementById('timerIcon');
+            const text = document.getElementById('timerBtnText');
+            
+            if (isTimerRunning) {
+                icon.className = 'fas fa-pause';
+                text.textContent = 'Pause';
+                btn.style.background = 'var(--warning-color)';
+            } else {
+                icon.className = 'fas fa-play';
+                text.textContent = 'Start';
+                btn.style.background = 'var(--primary-color)';
+            }
+        }
+
+        function openTimerPopup() {
+            document.getElementById('popupOverlay').style.display = 'block';
+            document.getElementById('popupTimer').style.display = 'block';
+        }
+
+        function closeTimerPopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('popupTimer').style.display = 'none';
+        }
+
+        // Professional Scoreboard functions
+        function openFullscreenScoreboard() {
+            document.getElementById('fullscreenScoreboard').style.display = 'block';
+            updateProScoreboardDisplay();
+        }
+
+        function closeFullscreenScoreboard() {
+            document.getElementById('fullscreenScoreboard').style.display = 'none';
+            pauseProGameTimer();
+        }
+
+        function updateProTeamNames() {
+            const team1Name = document.getElementById('proTeam1Name').value || 'Purple Team';
+            const team2Name = document.getElementById('proTeam2Name').value || 'Gold Team';
+            document.getElementById('proTeam1Display').textContent = team1Name;
+            document.getElementById('proTeam2Display').textContent = team2Name;
+        }
+
+        function updateProScoreboardDisplay() {
+            document.getElementById('proScore1').textContent = proTeam1Score;
+            document.getElementById('proScore2').textContent = proTeam2Score;
+            updateProTeamNames();
+            updateProGameTimerDisplay();
+        }
+
+        function changeProScore(team, points) {
+            if (team === 1) {
+                proTeam1Score = Math.max(0, proTeam1Score + points);
+                document.getElementById('proScore1').textContent = proTeam1Score;
+            } else {
+                proTeam2Score = Math.max(0, proTeam2Score + points);
+                document.getElementById('proScore2').textContent = proTeam2Score;
+            }
+            
+            // Show celebration for scoring
+            if (points > 0) {
+                createProFireworks();
+                playProScoreSound();
+            }
+        }
+
+        function toggleProGameTimer() {
+            if (isProGameTimerRunning) {
+                pauseProGameTimer();
+            } else {
+                startProGameTimer();
+            }
+        }
+
+        function startProGameTimer() {
+            if (!isProGameTimerRunning) {
+                isProGameTimerRunning = true;
+                updateProGameTimerButton();
+                
+                // Set initial time from wheel if timer is at zero
+                if (proGameTimerSeconds === 0) {
+                    proGameTimerSeconds = proGameMinutes * 60;
+                }
+                
+                proGameTimerInterval = setInterval(() => {
+                    if (proGameTimerSeconds > 0) {
+                        proGameTimerSeconds--;
+                        updateProGameTimerDisplay();
+                    } else {
+                        // Time's up!
+                        pauseProGameTimer();
+                        showProWinnerCelebration();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseProGameTimer() {
+            isProGameTimerRunning = false;
+            clearInterval(proGameTimerInterval);
+            updateProGameTimerButton();
+        }
+
+        function updateProGameTimerButton() {
+            const btn = document.getElementById('proGameStartPauseBtn');
+            const icon = document.getElementById('proGameTimerIcon');
+            const text = document.getElementById('proGameTimerBtnText');
+            
+            if (isProGameTimerRunning) {
+                icon.className = 'fas fa-pause';
+                text.textContent = 'Pause';
+            } else {
+                icon.className = 'fas fa-play';
+                text.textContent = 'Start';
+            }
+        }
+
+        function updateProGameTimerDisplay() {
+            const display = formatTime(proGameTimerSeconds);
+            document.getElementById('proGameTimer').textContent = display;
+        }
+
+        function resetProGame() {
+            // Reset scores
+            proTeam1Score = 0;
+            proTeam2Score = 0;
+            
+            // Reset game timer
+            isProGameTimerRunning = false;
+            clearInterval(proGameTimerInterval);
+            proGameTimerSeconds = proGameMinutes * 60;
+            
+            updateProScoreboardDisplay();
+            updateProGameTimerButton();
+            hideProWinnerCelebration();
+        }
+
+        function showProWinnerCelebration() {
+            const team1Name = document.getElementById('proTeam1Name').value || 'Purple Team';
+            const team2Name = document.getElementById('proTeam2Name').value || 'Gold Team';
+            
+            let winnerText;
+            if (proTeam1Score > proTeam2Score) {
+                winnerText = `${team1Name.toUpperCase()} WINS!`;
+            } else if (proTeam2Score > proTeam1Score) {
+                winnerText = `${team2Name.toUpperCase()} WINS!`;
+            } else {
+                winnerText = "IT'S A TIE!";
+            }
+            
+            document.getElementById('proWinnerText').textContent = winnerText;
+            document.getElementById('proWinnerCelebration').style.display = 'flex';
+            
+            // Create massive fireworks display
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => createProFireworks(), i * 100);
+            }
+            
+            // Play celebration sound
+            playProWinnerSound();
+            
+            // Auto-hide after 8 seconds
+            setTimeout(hideProWinnerCelebration, 8000);
+        }
+
+        function hideProWinnerCelebration() {
+            document.getElementById('proWinnerCelebration').style.display = 'none';
+        }
+
+        function createProFireworks() {
+            const fireworksContainer = document.getElementById('proFireworks');
+            const colors = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#f97316', '#06b6d4', '#84cc16'];
+            
+            for (let i = 0; i < 20; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'pro-firework';
+                firework.style.left = Math.random() * 100 + '%';
+                firework.style.top = Math.random() * 100 + '%';
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = Math.random() * 0.5 + 's';
+                
+                fireworksContainer.appendChild(firework);
+                
+                // Remove firework after animation
+                setTimeout(() => {
+                    if (firework.parentNode) {
+                        firework.parentNode.removeChild(firework);
+                    }
+                }, 1500);
+            }
+        }
+
+        function playProScoreSound() {
+            // Create audio context for score sound
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(1500, audioContext.currentTime + 0.15);
+                
+                gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.15);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function playProWinnerSound() {
+            // Create audio context for winner sound
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Play a professional victory fanfare
+                const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98]; // C, E, G, C, E, G
+                notes.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime + index * 0.2);
+                    gainNode.gain.setValueAtTime(0.4, audioContext.currentTime + index * 0.2);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + index * 0.2 + 0.6);
+                    
+                    oscillator.start(audioContext.currentTime + index * 0.2);
+                    oscillator.stop(audioContext.currentTime + index * 0.2 + 0.6);
+                });
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        // YouTube search functions
+        function searchYouTube() {
+            const query = document.getElementById('youtubeSearch').value.trim();
+            if (!query) {
+                showNotification('Please enter a search term', 'warning');
+                return;
+            }
+            performYouTubeSearch(query);
+        }
+
+        function quickSearch(query) {
+            document.getElementById('youtubeSearch').value = query;
+            performYouTubeSearch(query);
+        }
+
+        function performYouTubeSearch(query) {
+            // Show loading
+            document.getElementById('youtubeLoading').style.display = 'block';
+            document.getElementById('youtubeResults').style.display = 'none';
+            
+            // Add K-5 appropriate filters to the search
+            const k5SafeQuery = query + ' kids elementary school educational appropriate safe';
+            
+            // Create YouTube search URL with safe search and educational filters
+            const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(k5SafeQuery)}&sp=EgQQARgB`;
+            
+            // Simulate search delay and show results
+            setTimeout(() => {
+                document.getElementById('youtubeLoading').style.display = 'none';
+                document.getElementById('youtubeResults').style.display = 'block';
+                
+                // Create search results display
+                const resultsHtml = `
+                    <div style="background: var(--gray-50); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-4);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+                            <strong style="color: var(--gray-800);">Search: "${query}"</strong>
+                            <span style="font-size: var(--font-size-sm); color: var(--success-color); font-weight: 500;">✓ K-5 Filtered</span>
+                        </div>
+                        <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--space-4);">
+                            Showing educational, age-appropriate PE videos for elementary students
+                        </div>
+                        <div style="display: grid; gap: var(--space-2);">
+                            <a href="${searchUrl}" target="_blank" class="submit-btn" style="text-decoration: none; display: block; text-align: center;">
+                                <i class="fab fa-youtube"></i> Open YouTube Search Results
+                            </a>
+                            <button onclick="openYouTubeChannel('GoNoodleGames')" class="control-btn" style="width: 100%;">
+                                <i class="fab fa-youtube"></i> GoNoodle (Recommended)
+                            </button>
+                            <button onclick="openYouTubeChannel('CosmicKidsYoga')" class="control-btn" style="width: 100%;">
+                                <i class="fab fa-youtube"></i> Cosmic Kids Yoga
+                            </button>
+                            <button onclick="openYouTubeChannel('PECentral')" class="control-btn" style="width: 100%;">
+                                <i class="fab fa-youtube"></i> PE Central
+                            </button>
+                        </div>
+                    </div>
+                    <div style="background: #fef3c7; border: 1px solid var(--warning-color); border-radius: var(--radius-lg); padding: var(--space-4); font-size: var(--font-size-sm);">
+                        <strong>Safety Tip:</strong> Always preview videos before showing to students. These searches include educational filters, but teacher review is recommended.
+                    </div>
+                `;
+                
+                document.getElementById('videoResults').innerHTML = resultsHtml;
+            }, 1000);
+        }
+
+        function openYouTubeChannel(channelName) {
+            const channelUrls = {
+                'GoNoodleGames': 'https://www.youtube.com/channel/UC2YBT7HYqCbbvzu3kKZ3wnw',
+                'CosmicKidsYoga': 'https://www.youtube.com/user/CosmicKidsYoga',
+                'PECentral': 'https://www.youtube.com/@pecentralvideos2975'
+            };
+            
+            if (channelUrls[channelName]) {
+                window.open(channelUrls[channelName], '_blank');
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Navigation
+        function showSection(section) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            // Add active class to clicked item
+            event.target.classList.add('active');
+            
+            // Handle section-specific actions
+            switch(section) {
+                case 'timer':
+                    // Timer section is always visible, no action needed
+                    break;
+                case 'youtube':
+                    openModal('youtubeModal');
+                    break;
+                case 'scoreboard':
+                    openFullscreenScoreboard();
+                    break;
+                case 'tools':
+                    showToolsMenu();
+                    break;
+            }
+        }
+        
+        // Tools menu function
+        function showToolsMenu() {
+            const toolsOptions = `
+                <div style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--white); border-radius: var(--radius-xl); padding: var(--space-4); box-shadow: var(--shadow-xl); z-index: 1000; min-width: 250px; border: 1px solid var(--gray-200);">
+                    <div style="text-align: center; font-weight: 600; margin-bottom: var(--space-3); color: var(--gray-800); font-size: var(--font-size-lg);">More Tools</div>
+                    <button onclick="openModal('studentModal'); closeToolsMenu();" style="width: 100%; margin-bottom: var(--space-2); padding: var(--space-3); background: var(--primary-color); color: var(--white); border: none; border-radius: var(--radius-lg); cursor: pointer; font-weight: 500; transition: all 0.2s ease;">
+                        <i class="fas fa-users"></i> Student Data
+                    </button>
+                    <button onclick="openModal('fitnessModal'); closeToolsMenu();" style="width: 100%; margin-bottom: var(--space-2); padding: var(--space-3); background: var(--primary-color); color: var(--white); border: none; border-radius: var(--radius-lg); cursor: pointer; font-weight: 500; transition: all 0.2s ease;">
+                        <i class="fas fa-dumbbell"></i> FitnessGram
+                    </button>
+                    <button onclick="openModal('musicModal'); closeToolsMenu();" style="width: 100%; padding: var(--space-3); background: var(--primary-color); color: var(--white); border: none; border-radius: var(--radius-lg); cursor: pointer; font-weight: 500; transition: all 0.2s ease;">
+                        <i class="fas fa-music"></i> Music Player
+                    </button>
+                </div>
+                <div id="toolsOverlay" onclick="closeToolsMenu()" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; backdrop-filter: blur(2px);"></div>
+            `;
+            
+            // Remove existing tools menu if any
+            const existingMenu = document.getElementById('toolsMenu');
+            if (existingMenu) {
+                existingMenu.remove();
+            }
+            
+            // Add tools menu to body
+            const menuDiv = document.createElement('div');
+            menuDiv.id = 'toolsMenu';
+            menuDiv.innerHTML = toolsOptions;
+            document.body.appendChild(menuDiv);
+        }
+        
+        function closeToolsMenu() {
+            const toolsMenu = document.getElementById('toolsMenu');
+            if (toolsMenu) {
+                toolsMenu.remove();
+            }
+        }
+
+        // Copy prompt function
+        function copyPromptToClipboard() {
+            const promptText = `Create a Texas TEKS-based PE lesson plan with links for warmups and pictures/diagrams for activities. Give detailed instructions on how to teach each activity.
+
+Class Details:
+• Two main sections: Kindergarten-2nd grade OR 3rd-5th grade
+• About 25 kids per class
+• 50 minute duration
+
+Include: Texas TEKS standards, warmup links, activity diagrams/pictures, detailed teaching instructions, safety considerations, and assessment methods.`;
+            
+            navigator.clipboard.writeText(promptText).then(function() {
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied Successfully!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+                
+                showNotification('Prompt copied to clipboard!', 'success');
+            }).catch(function(err) {
+                showNotification('Failed to copy prompt. Please copy manually.', 'error');
+            });
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--error-color)' : type === 'warning' ? 'var(--warning-color)' : 'var(--info-color)'};
+                color: white;
+                padding: var(--space-4);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-lg);
+                z-index: 10000;
+                font-weight: 500;
+                max-width: 300px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in forwards';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Weather update
+        function updateWeather() {
+            const temps = [68, 70, 72, 74, 76, 78, 80];
+            const conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Clear', 'Fair'];
+            const temp = temps[Math.floor(Math.random() * temps.length)];
+            const condition = conditions[Math.floor(Math.random() * conditions.length)];
+            const highTemp = temp + Math.floor(Math.random() * 8) + 2;
+            const lowTemp = temp - Math.floor(Math.random() * 8) - 2;
+            
+            document.getElementById('weatherTemp').textContent = temp + '°F';
+            document.getElementById('weatherCondition').textContent = condition;
+            document.getElementById('highTemp').textContent = highTemp;
+            document.getElementById('lowTemp').textContent = lowTemp;
+            
+            // Update time
+            const now = new Date();
+            const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
+        }
+
+        // Form submissions
+        document.addEventListener('DOMContentLoaded', function() {
+            // YouTube search enter key support
+            const youtubeSearchInput = document.getElementById('youtubeSearch');
+            if (youtubeSearchInput) {
+                youtubeSearchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchYouTube();
+                    }
+                });
+            }
+            
+            // Form event listeners
+            document.getElementById('quickStudentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const student = {
+                    name: document.getElementById('studentName').value,
+                    grade: document.getElementById('studentGrade').value,
+                    participation: document.getElementById('participation').value,
+                    date: new Date().toLocaleDateString()
+                };
+                
+                let students = JSON.parse(localStorage.getItem('students') || '[]');
+                students.push(student);
+                localStorage.setItem('students', JSON.stringify(students));
+                
+                showNotification('Student data saved successfully!', 'success');
+                closeModal('studentModal');
+                this.reset();
+            });
+
+            document.getElementById('fitnessForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const fitness = {
+                    name: document.getElementById('fitnessName').value,
+                    pacer: document.getElementById('pacerLaps').value,
+                    pushUps: document.getElementById('pushUps').value,
+                    sitReach: document.getElementById('sitReach').value,
+                    date: new Date().toLocaleDateString()
+                };
+                
+                let fitnessData = JSON.parse(localStorage.getItem('fitnessData') || '[]');
+                fitnessData.push(fitness);
+                localStorage.setItem('fitnessData', JSON.stringify(fitnessData));
+                
+                showNotification('Fitness assessment saved successfully!', 'success');
+                closeModal('fitnessModal');
+                this.reset();
+            });
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeModal(e.target.id);
+            }
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateWeather();
+            updateTimerDisplay();
+            
+            // Update time every minute
+            setInterval(function() {
+                const now = new Date();
+                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+                document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
+            }, 60000);
+            
+            // Add fade-in animation to elements
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
+
